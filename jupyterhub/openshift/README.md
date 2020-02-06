@@ -24,7 +24,13 @@ oc new-build . --name scicat-notebook   --image-stream s2i-minimal-notebook:3.6 
 
 ## Installation of the Jupyer Hub
 
-* Load the template
+* Load the images
+
+```
+oc apply -f https://raw.githubusercontent.com/jupyter-on-openshift/jupyterhub-quickstart/master/image-streams/jupyterhub.json
+```
+
+* Load the templates
 
 ```
 oc apply -f https://raw.githubusercontent.com/jupyter-on-openshift/jupyterhub-quickstart/master/templates/jupyterhub-workspace.json
@@ -40,7 +46,7 @@ Then run the following command:
 oc new-app --template jupyterhub-workspace --param NOTEBOOK_MEMORY=2Gi --param CLUSTER_SUBDOMAIN=apps.ocp4a.psi.ch --param SPAWNER_NAMESPACE=`oc project --short` --param VOLUME_SIZE=4Gi --param IDLE_TIMEOUT=3600 --param JUPYTERHUB_CONFIG="`cat jupyterhub_config.py`" --param NOTEBOOK_IMAGE=scicat-notebook:latest
 ```
 
-This will take a few minutes to finish. Afterwards you can enter the given URL address in a browser  which should start a login page into the Jupyter univers.
+This will take a few minutes to finish. Afterwards you can enter the given URL address in a browser  which should start a login page into the Jupyter universe.
 
 The initial startup of the server, which are created for each user may take some time (about 1 minute), subsequent logins are much faster.
 
