@@ -23,6 +23,7 @@ c.LDAPAuthenticator.server_address = 'd.psi.ch'
 c.LDAPAuthenticator.server_port = 389
 c.LDAPAuthenticator.bind_dn_template = 'CN={username},ou=users,ou=psi,dc=d,dc=psi,dc=ch'
 c.LDAPAuthenticator.lookup_dn = True
+# c.LDAPAuthenticator.lookup_dn_search_filter = '(&(objectclass=person)(cn={username}))'
 c.LDAPAuthenticator.lookup_dn_search_filter = '({login_attr}={login})'
 c.LDAPAuthenticator.lookup_dn_search_user = 'add your infos here... '
 c.LDAPAuthenticator.lookup_dn_search_password = 'add your password here...'
@@ -90,4 +91,25 @@ c.KubeSpawner.volume_mounts = [
     }
 ]
 
-c.KubeSpawner.init_containers = []
+c.KubeSpawner.init_containers = [
+    {
+        'name': 'setup-volume',
+        'image': 'scicat-notebook:latest',
+        'command': [
+            '/bin/cp',
+            '/opt/app-root/bootstrap.ipynb',
+            '/mnt'
+        ],
+        'resources': {
+            'limits': {
+                'memory': '256Mi'
+            }
+        },
+        'volumeMounts': [
+            {
+                'name': 'data',
+                'mountPath': '/mnt'
+            }
+        ]
+    }
+]
